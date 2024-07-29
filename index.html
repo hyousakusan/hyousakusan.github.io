@@ -19,12 +19,13 @@
         <button onclick="resetNumber()">リセット</button>
     </div>
     <script>
-        let currentNumber = 0;
+        let currentNumber = parseInt(localStorage.getItem('currentNumber')) || 0;
         const urlParams = new URLSearchParams(window.location.search);
         const mode = urlParams.get('mode');
 
         function updateDisplay() {
             document.getElementById('currentNumber').innerText = currentNumber.toString().padStart(3, '0');
+            localStorage.setItem('currentNumber', currentNumber.toString());
         }
 
         function updateNumber(change) {
@@ -41,14 +42,16 @@
         // モードに応じて表示を切り替える
         if (mode === 'staff') {
             document.getElementById('controls').style.display = 'block';
-        } else {
-            // 待合室モードの場合、番号を自動的に更新する擬似的な処理
-            setInterval(() => {
-                if (Math.random() < 0.3) { // 30%の確率で番号を更新
-                    updateNumber(1);
-                }
-            }, 5000); // 5秒ごとにチェック
         }
+
+        // 全てのモードで定期的に更新をチェック
+        setInterval(() => {
+            let storedNumber = parseInt(localStorage.getItem('currentNumber')) || 0;
+            if (storedNumber !== currentNumber) {
+                currentNumber = storedNumber;
+                updateDisplay();
+            }
+        }, 1000); // 1秒ごとにチェック
 
         updateDisplay();
     </script>
