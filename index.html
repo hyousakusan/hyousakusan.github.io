@@ -29,14 +29,18 @@
         }
 
         function updateNumber(change) {
-            currentNumber += change;
-            if (currentNumber < 0) currentNumber = 0;
-            updateDisplay();
+            if (mode === 'staff') {
+                currentNumber += change;
+                if (currentNumber < 0) currentNumber = 0;
+                updateDisplay();
+            }
         }
 
         function resetNumber() {
-            currentNumber = 0;
-            updateDisplay();
+            if (mode === 'staff') {
+                currentNumber = 0;
+                updateDisplay();
+            }
         }
 
         // モードに応じて表示を切り替える
